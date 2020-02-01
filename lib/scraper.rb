@@ -13,13 +13,21 @@ class Scraper
     # responsible for scraping the index page that lists
     # all of the students
     doc = Nokogiri::HTML(open(index_url))
+
     doc.css("div.student-card").collect do |student|
+
+    # gets student names
+    #binding.pry
+    doc.css("div.student-card")[0, 2].collect do |student|
+
       {
         :name => student.css("div h4.student-name").text.strip,
         :location => student.css("p.student-location").text.strip,
         :profile_url => student.css("a").map {|link| link["href"]}.join(" ").strip
       }
     end
+
+    #binding.pry
   end
 
   def self.scrape_profile_page(profile_url)
